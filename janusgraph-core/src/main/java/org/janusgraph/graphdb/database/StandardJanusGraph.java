@@ -488,6 +488,11 @@ public class StandardJanusGraph extends JanusGraphBlueprintsGraph {
         idAssigner.assignID(vertex,label);
     }
 
+    public void assignID(InternalVertex vertex, VertexLabel label, long partitionID) {
+        idAssigner.assignID(vertex,label, partitionID);
+    }
+
+
     public static boolean acquireLock(InternalRelation relation, int pos, boolean acquireLocksConfig) {
         InternalRelationType type = (InternalRelationType)relation.getType();
         return acquireLocksConfig && type.getConsistencyModifier()== ConsistencyModifier.LOCK &&

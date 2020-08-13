@@ -63,6 +63,9 @@ public interface JanusGraphTransaction extends Transaction {
      */
     JanusGraphVertex addVertex(Long id, VertexLabel vertexLabel);
 
+    JanusGraphVertex addVertex(VertexLabel vertexLabel, long partitionID);
+
+
     /**
      * Retrieves the vertex for the specified id.
      *

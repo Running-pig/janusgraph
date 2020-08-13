@@ -104,6 +104,7 @@ public abstract class JanusGraphBlueprintsTransaction implements JanusGraphTrans
         ElementHelper.legalPropertyKeyValueArray(keyValues);
         if (ElementHelper.getIdValue(keyValues).isPresent() && !((StandardJanusGraph) getGraph()).getConfiguration().allowVertexIdSetting()) throw Vertex.Exceptions.userSuppliedIdsNotSupported();
         Object labelValue = null;
+        Object partitionIDValue = null;
         for (int i = 0; i < keyValues.length; i = i + 2) {
             if (keyValues[i].equals(T.label)) {
                 labelValue = keyValues[i+1];
@@ -111,14 +112,19 @@ public abstract class JanusGraphBlueprintsTransaction implements JanusGraphTrans
                         "Expected a string or VertexLabel as the vertex label argument, but got: %s",labelValue);
                 if (labelValue instanceof String) ElementHelper.validateLabel((String) labelValue);
             }
+            if (keyValues[i].equals("partition_id")) {
+                partitionIDValue = keyValues[i+1];
+            }
         }
         VertexLabel label = BaseVertexLabel.DEFAULT_VERTEXLABEL;
         if (labelValue!=null) {
             label = (labelValue instanceof VertexLabel)?(VertexLabel)labelValue:getOrCreateVertexLabel((String) labelValue);
         }
 
-        final Long id = ElementHelper.getIdValue(keyValues).map(Number.class::cast).map(Number::longValue).orElse(null);
-        final JanusGraphVertex vertex = addVertex(id, label);
+        Long partitionID = partitionIDValue !=null && partitionIDValue instanceof Long ? (Long) partitionIDValue : 0L;
+        final JanusGraphVertex vertex = addVertex(label, partitionID);
+//        final Long id = ElementHelper.getIdValue(keyValues).map(Number.class::cast).map(Number::longValue).orElse(null);
+//        final JanusGraphVertex vertex = addVertex(id, label);
         org.janusgraph.graphdb.util.ElementHelper.attachProperties(vertex, keyValues);
         return vertex;
     }

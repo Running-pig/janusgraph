@@ -525,6 +525,23 @@ public class StandardJanusGraphTx extends JanusGraphBlueprintsTransaction implem
         return vertex;
 
     }
+    @Override
+    public JanusGraphVertex addVertex(VertexLabel label, long partitionId) {
+        verifyWriteAccess();
+        if (label==null) label=BaseVertexLabel.DEFAULT_VERTEXLABEL;
+        StandardVertex vertex = new StandardVertex(this, IDManager.getTemporaryVertexID(IDManager.VertexIDType.NormalVertex, temporaryIds.nextID()), ElementLifeCycle.New);
+        if (config.hasAssignIDsImmediately() || label.isPartitioned()) {
+            graph.assignID(vertex,label, partitionId);
+        }
+        addProperty(vertex, BaseKey.VertexExists, Boolean.TRUE);
+        if (label!=BaseVertexLabel.DEFAULT_VERTEXLABEL) { //Add label
+            Preconditions.checkArgument(label instanceof VertexLabelVertex);
+            addEdge(vertex, label, BaseLabel.VertexLabelEdge);
+        }
+        vertexCache.add(vertex, vertex.longId());
+        return vertex;
+
+    }
 
     @Override
     public JanusGraphVertex addVertex(String vertexLabel) {
