@@ -26,8 +26,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
+import org.janusgraph.shaded.guava.base.Preconditions;
+import org.janusgraph.shaded.guava.base.Stopwatch;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.janusgraph.core.JanusGraphException;
 import org.janusgraph.diskstorage.BackendException;

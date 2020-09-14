@@ -155,6 +155,7 @@
                                     <include>com.esotericsoftware.minlog:*</include>
                                     <include>com.esotericsoftware.reflectasm:*</include>
                                     <include>org.objenesis:*</include>
+                                    <include>com.google.guava:*</include>
                                 </includes>
                             </artifactSet>
                             <filters>
@@ -181,6 +182,10 @@
                                 <relocation>
                                     <pattern>org.objenesis</pattern>
                                     <shadedPattern>org.janusgraph.shaded.objenesis_2_1</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google.common</pattern>
+                                    <shadedPattern>org.janusgraph.shaded.guava</shadedPattern>
                                 </relocation>
                             </relocations>
                             <!-- false below means the shade plugin overwrites the main project artifact (the one with no classifier).
